@@ -22,6 +22,7 @@ r = [
     ['r', 'r'],
     ['r', 'r']
 ]
+faces_idx = {'w':0, 'y':1, 'o':2, 'g':3, 'b':4, 'r':5}
 goal_state = [w, y, o, g, b, r]
 
 class Node():
@@ -65,6 +66,7 @@ class QueueFrontier(StackFrontier):
             return node
 
 class RubikCube():
+    #green is front and white is up
     def __init__(self, state, goal_state):
         self.state = state
         self.goal_state = goal_state
@@ -93,35 +95,35 @@ class RubikCube():
     def R(self, state):
         new_state = [[[None for _ in range(2)] for _ in range(2)] for _ in range(6)]
         #red
-        new_state[-1][0][0] = state[-1][1][0]
-        new_state[-1][0][1] = state[-1][0][0]
-        new_state[-1][1][0] = state[-1][1][1]
-        new_state[-1][1][1] = state[-1][0][1]
+        new_state[faces_idx['r']][0][0] = state[faces_idx['r']][1][0]
+        new_state[faces_idx['r']][0][1] = state[faces_idx['r']][0][0]
+        new_state[faces_idx['r']][1][0] = state[faces_idx['r']][1][1]
+        new_state[faces_idx['r']][1][1] = state[faces_idx['r']][0][1]
         #orange
-        new_state[2][0][0] = state[2][0][0]
-        new_state[2][0][1] = state[2][0][1]
-        new_state[2][1][0] = state[2][1][0]
-        new_state[2][1][1] = state[2][1][1]
+        new_state[faces_idx['o']][0][0] = state[faces_idx['o']][0][0]
+        new_state[faces_idx['o']][0][1] = state[faces_idx['o']][0][1]
+        new_state[faces_idx['o']][1][0] = state[faces_idx['o']][1][0]
+        new_state[faces_idx['o']][1][1] = state[faces_idx['o']][1][1]
         #green
-        new_state[3][0][1] = state[1][0][1]
-        new_state[3][1][1] = state[1][1][1]
-        new_state[3][0][0] = state[3][0][0]
-        new_state[3][1][0] = state[3][1][0]
+        new_state[faces_idx['g']][0][1] = state[faces_idx['y']][0][1]
+        new_state[faces_idx['g']][1][1] = state[faces_idx['y']][1][1]
+        new_state[faces_idx['g']][0][0] = state[faces_idx['g']][0][0]
+        new_state[faces_idx['g']][1][0] = state[faces_idx['g']][1][0]
         #white
-        new_state[0][0][1] = state[3][0][1]
-        new_state[0][1][1] = state[3][1][1]
-        new_state[0][0][0] = state[0][0][0]
-        new_state[0][1][0] = state[0][1][0]
+        new_state[faces_idx['w']][0][1] = state[faces_idx['g']][0][1]
+        new_state[faces_idx['w']][1][1] = state[faces_idx['g']][1][1]
+        new_state[faces_idx['w']][0][0] = state[faces_idx['w']][0][0]
+        new_state[faces_idx['w']][1][0] = state[faces_idx['w']][1][0]
         #blue
-        new_state[4][0][1] = state[0][0][1]
-        new_state[4][1][1] = state[0][1][1]
-        new_state[4][0][0] = state[4][0][0]
-        new_state[4][1][0] = state[4][1][0]
+        new_state[faces_idx['b']][0][1] = state[faces_idx['w']][0][1]
+        new_state[faces_idx['b']][1][1] = state[faces_idx['w']][1][1]
+        new_state[faces_idx['b']][0][0] = state[faces_idx['b']][0][0]
+        new_state[faces_idx['b']][1][0] = state[faces_idx['b']][1][0]
         #yellow
-        new_state[1][0][1] = state[4][0][1]
-        new_state[1][1][1] = state[4][1][1]
-        new_state[1][0][0] = state[1][0][0]
-        new_state[1][1][0] = state[1][1][0]
+        new_state[faces_idx['y']][0][1] = state[faces_idx['b']][0][1]
+        new_state[faces_idx['y']][1][1] = state[faces_idx['b']][1][1]
+        new_state[faces_idx['y']][0][0] = state[faces_idx['y']][0][0]
+        new_state[faces_idx['y']][1][0] = state[faces_idx['y']][1][0]
         return new_state
     def L(self, state):
         new_state = state
