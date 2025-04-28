@@ -22,18 +22,42 @@ r = [
     ['r', 'r'],
     ['r', 'r']
 ]
+w_ini = [
+    ['w', 'g'],
+    ['w', 'g']
+]
+y_ini = [
+    ['b', 'y'],
+    ['b', 'y']
+]
+o_ini = [
+    ['o', 'o'],
+    ['o', 'o']
+]
+g_ini = [
+    ['g', 'y'],
+    ['g', 'y']
+]
+b_ini = [
+    ['w', 'b'],
+    ['w', 'b']
+]
+r_ini = [
+    ['r', 'r'],
+    ['r', 'r']
+]
 faces_idx = {'w':0, 'y':3, 'o':4, 'g':2, 'b':5, 'r':1}
 goal_state = [w, r, g, y, o, b]
+initial_state = [w_ini, r_ini, g_ini, y_ini, o_ini, b_ini]
 
 
 class Node():
-    def __init__(self, state, parent=None, action=None, depth=0, path_cost=0, heuristic=0):
-        self.state = None
-        self.parent = None
-        self.action = None
-        self.depth = 0
-        self.path_cost = 0
-        self.heuristic = 0
+    def __init__(self, state, parent=None, action=None):
+        self.state = state
+        self.parent = parent
+        self.action = action
+        self.start = state
+
 class StackFrontier():
     def __init__(self):
         self.frontier = []
@@ -71,15 +95,14 @@ class RubikCube():
     def __init__(self, state, goal_state):
         self.state = state
         self.goal_state = goal_state
-        self.visited = set()
+        self.visited = []
         self.frontier = []
         self.solution = None
+
     def setFrontier(self, node):
         self.frontier.append(node)
 
     def neighbors(self, state):
-        state = self.state
-        neighbors = []
         candidates = [
             ('R', self.R(state)),
             ('L', self.L(state)),
@@ -88,10 +111,44 @@ class RubikCube():
             ('B', self.B(state))
         ]
         result = []
-        for action, (name, movement) in candidates:
-            result.append((action, (name, movement)))
+        for action, state in candidates:
+            result.append((action, state))
 
+        
         return result
+    
+    def solve(self):
+        self.num_explored = 0
+
+        start = Node(state=self.state, parent=None, action=None)
+        frontier = QueueFrontier()
+        frontier.add(start)
+
+        while True:
+            '''if frontier.empty():
+                raise Exception('no Solution')'''
+        
+            node = frontier.remove()
+            if node.state == self.goal_state:
+                actions = []
+                states = []
+                while node.parent is not None:
+                    actions.append(node.action)
+                    states.append(node.state)
+                    node  = node.parent
+
+                actions.reverse()
+                states.reverse()
+                self.solution = (actions, states)
+                return
+            
+            self.visited.append(node.state)
+            for action, state in self.neighbors(node.state):
+                if not frontier.contains_state(state) and state not in self.visited:
+                    #state = self.R(state)
+                    child = Node(state=state, parent=node, action=action)
+                    frontier.add(child)
+
 
     def R(self, state):
         new_state = [[[None for _ in range(2)] for _ in range(2)] for _ in range(6)]
@@ -260,13 +317,6 @@ class RubikCube():
         return new_state
     
 
-rubik = RubikCube(goal_state, goal_state)
-print(goal_state[3][0][1])
-my_state = goal_state
-my_state = rubik.F(goal_state)
-my_state = rubik.R(my_state)
-my_state = rubik.L(my_state)
-my_state = rubik.B(my_state)
-for line in my_state:
-    for row in line:
-        print(row)
+rubik = RubikCube(initial_state, goal_state)
+rubik.solve()
+print(rubik.solution[0])
