@@ -115,10 +115,10 @@ class RubikCube():
         new_state[faces_idx['w']][0][0] = state[faces_idx['w']][0][0]
         new_state[faces_idx['w']][1][0] = state[faces_idx['w']][1][0]
         #blue
-        new_state[faces_idx['b']][0][1] = state[faces_idx['w']][0][1]
-        new_state[faces_idx['b']][1][1] = state[faces_idx['w']][1][1]
-        new_state[faces_idx['b']][0][0] = state[faces_idx['b']][0][0]
-        new_state[faces_idx['b']][1][0] = state[faces_idx['b']][1][0]
+        new_state[faces_idx['b']][0][1] = state[faces_idx['b']][0][1]
+        new_state[faces_idx['b']][1][1] = state[faces_idx['b']][1][1]
+        new_state[faces_idx['b']][0][0] = state[faces_idx['w']][0][0]
+        new_state[faces_idx['b']][1][0] = state[faces_idx['w']][1][0]
         #yellow
         new_state[faces_idx['y']][0][1] = state[faces_idx['b']][0][1]
         new_state[faces_idx['y']][1][1] = state[faces_idx['b']][1][1]
@@ -126,11 +126,37 @@ class RubikCube():
         new_state[faces_idx['y']][1][0] = state[faces_idx['y']][1][0]
         return new_state
     def L(self, state):
-        new_state = state
-        new_state[2][0][0] = state[2][0][1]
-        new_state[2][0][1] = state[2][1][1]
-        new_state[2][1][1] = state[2][1][0]
-        new_state[2][1][0] = state[2][0][0]
+        new_state = [[[None for _ in range(2)] for _ in range(2)] for _ in range(6)]
+        #red
+        new_state[faces_idx['r']][0][0] = state[faces_idx['r']][0][0]
+        new_state[faces_idx['r']][0][1] = state[faces_idx['r']][0][1]
+        new_state[faces_idx['r']][1][0] = state[faces_idx['r']][1][0]
+        new_state[faces_idx['r']][1][1] = state[faces_idx['r']][1][1]
+        #orange
+        new_state[faces_idx['o']][0][0] = state[faces_idx['o']][0][1]
+        new_state[faces_idx['o']][0][1] = state[faces_idx['o']][1][1]
+        new_state[faces_idx['o']][1][0] = state[faces_idx['o']][0][0]
+        new_state[faces_idx['o']][1][1] = state[faces_idx['o']][1][0]
+        #green
+        new_state[faces_idx['g']][0][1] = state[faces_idx['g']][0][1]
+        new_state[faces_idx['g']][1][1] = state[faces_idx['g']][1][1]
+        new_state[faces_idx['g']][0][0] = state[faces_idx['w']][0][0]
+        new_state[faces_idx['g']][1][0] = state[faces_idx['w']][1][0]
+        #white
+        new_state[faces_idx['w']][0][1] = state[faces_idx['w']][0][1]
+        new_state[faces_idx['w']][1][1] = state[faces_idx['w']][1][1]
+        new_state[faces_idx['w']][0][0] = state[faces_idx['b']][1][1]
+        new_state[faces_idx['w']][1][0] = state[faces_idx['b']][0][1]
+        #blue
+        new_state[faces_idx['b']][0][1] = state[faces_idx['y']][0][1]
+        new_state[faces_idx['b']][1][1] = state[faces_idx['y']][1][1]
+        new_state[faces_idx['b']][0][0] = state[faces_idx['b']][0][0]
+        new_state[faces_idx['b']][1][0] = state[faces_idx['b']][1][0]
+        #yellow
+        new_state[faces_idx['y']][0][1] = state[faces_idx['y']][0][1]
+        new_state[faces_idx['y']][1][1] = state[faces_idx['y']][1][1]
+        new_state[faces_idx['y']][0][0] = state[faces_idx['g']][0][0]
+        new_state[faces_idx['y']][1][0] = state[faces_idx['g']][1][0]
         return new_state
     def F(self, state):
         new_state = state
@@ -159,5 +185,4 @@ rubik = RubikCube(goal_state, goal_state)
 print(goal_state[3][0][1])
 for line in rubik.R(goal_state):
     for row in line:
-
         print(row)
